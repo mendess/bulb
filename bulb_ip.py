@@ -38,19 +38,9 @@ class BulbIp:
         self.bulb = None
 
     def run(self, func, retry=True):
-        def fetch_bulb():
-            ip = Cache.get_ip()
-            if not ip:
-                ip = Cache.refresh_ip()
-                if not ip:
-                    print('Giving up...')
-                    return None
-            return Bulb(ip)
-
-        if self.bulb is None:
-            self.bulb = fetch_bulb()
+        bulb = self.load_bulb()
         try:
-            return func(self.bulb)
+            return func(bulb)
         except BulbException as e:
             print('Failed with', e)
             if retry:
@@ -59,6 +49,16 @@ class BulbIp:
                 self.bulb = None
                 return self.run(func, retry=False)
 
+    def load_bulb(self):
+        if self.bulb is None:
+            ip = Cache.get_ip()
+            if not ip:
+                ip = Cache.refresh_ip()
+                if not ip:
+                    print('Giving up...')
+                    return None
+            self.bulb = Bulb(ip)
+        return self.bulb
 
 
 instance = BulbIp()
@@ -68,3 +68,16 @@ def run(func):
         return instance.run(func)
     except Exception as e:
         print('Failed with', e)
+
+class BulbProxy:
+    def __getattribute__(self, name):
+        global instance
+        attr = Bulb.__getattribute__(instance.load_bulb(), name)
+        if hasattr(attr, '__call__'):
+            def f(*args, **kwargs):
+                return instance.run(lambda _: attr(*args, **kwargs))
+            return f
+        else:
+            return attr
+
+B = BulbProxy()

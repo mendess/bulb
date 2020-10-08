@@ -1,4 +1,5 @@
-from bulb_ip import run
+#!/usr/bin/env python3
+from bulb_ip import B
 from subprocess import Popen, PIPE
 
 props = [
@@ -14,7 +15,7 @@ props = [
     # 'flow_params'
     'music_on'
 ]
-prop = run(lambda x: x.get_properties(requested_properties=props))
+prop = B.get_properties(requested_properties=props)
 for k in prop.keys():
     if k == 'rgb':
         v = (

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import bulb_ip
 
-bulb_ip.run(lambda b: b.turn_on())
+bulb_ip.B.turn_on()

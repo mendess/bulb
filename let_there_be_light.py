@@ -1,6 +1,8 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
-import bulb_ip
+from bulb_ip import B
 
-bulb_ip.run(lambda b: b.turn_on())
-bulb_ip.run(lambda b: (b.set_hsv(0,0), b.set_brightness(100), b.set_color_temp(4700)))
+B.turn_on()
+B.set_hsv(0,0)
+B.set_brightness(100)
+B.set_color_temp(4700)

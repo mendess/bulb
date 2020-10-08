@@ -1,11 +1,12 @@
+#!/usr/bin/env python3
 from time import sleep
 from sys import argv
-from bulb_ip import run
+from bulb_ip import B
 
 sleep(float(argv[1]))
 for i in reversed(range(0, 101, 2)):
     try:
-        run(lambda bulb: bulb.set_brightness(i))
+        B.set_brightness(i)
         print('good ', i)
     except BulbException as e:
         print('error', i, e)
@@ -13,7 +14,7 @@ for i in reversed(range(0, 101, 2)):
 
 while True:
     try:
-        run(lambda bulb: bulb.turn_off())
+        B.turn_off()
         break
     except:
         pass

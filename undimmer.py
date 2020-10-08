@@ -1,11 +1,11 @@
-from yeelight import Bulb, BulbException
+#!/usr/bin/env python3
 from time import sleep
+from bulb_ip import B
 
-bulb = Bulb("192.168.1.7")
-bulb.turn_on()
+B.turn_on()
 for i in (range(0, 101)):
     try:
-        bulb.set_brightness(i)
+        B.set_brightness(i)
         print('good ', i)
     except BulbException as e:
         print('error', i, e)
