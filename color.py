@@ -36,5 +36,8 @@ r = color[0:2]
 g = color[2:4]
 b = color[4:6]
 
+if r == '00' and g == '00' and b == '00':
+    r = g = b = '01'
+
 B.set_rgb(int(r, 16), int(g, 16), int(b, 16))
 # run(lambda bulb: bulb.set_rgb(int(r, 16), int(g, 16), int(b, 16)))
