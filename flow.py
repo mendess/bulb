@@ -24,15 +24,14 @@ def list_flows():
         )
     for f in filter(f_check, dir(flows)):
         l[f] = None
-    for f in l.keys():
-        print(f)
+    return '\n'.join(l.keys())
 
 def show_description(flow):
-    print('\n'.join(
+    return '\n'.join(
         filter(lambda x: not (':returns' in x or ':rtype' in x),
             getattr(flows, flow).__doc__.split('\n')
             )
-        ).strip())
+        ).strip()
 
 
 if __name__ == '__main__':
@@ -45,11 +44,11 @@ if __name__ == '__main__':
             help="show the description of a flow", type=str)
     args = parser.parse_args()
     if args.list:
-        list_flows()
+        print(list_flows())
     elif args.stop:
         B.stop_flow()
     elif args.description:
-        show_description(args.description)
+        print(show_description(args.description))
     else:
         flow_name, args = (args.flow[0], list(map(int, args.flow[1:])))
         flow(flow_name, *args)

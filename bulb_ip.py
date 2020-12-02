@@ -80,4 +80,7 @@ class BulbProxy:
         else:
             return attr
 
+    def __dir__(self):
+        return dir(Bulb)
+
 B = BulbProxy()

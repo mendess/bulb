@@ -17,27 +17,29 @@ colors_dic = {
 
 }
 
-if argv[1] in colors_dic:
-    color = colors_dic[argv[1]]
-else:
-    color = argv[1].replace('#','')
+def change(arg, check_flow=''):
+    if arg in colors_dic:
+        color = colors_dic[arg]
+    else:
+        color = arg.replace('#','')
 
-def dbg(e):
-    print(e)
-    return e
+    def dbg(e):
+        print(e)
+        return e
 
-if (len(argv) > 2
-    and argv[2] == 'check_flow'
-    and B.get_properties(['flowing'])['flowing'] == '1'):
-    print('flowing, aborting')
-    exit(0)
+    if (check_flow == 'check_flow'
+        and B.get_properties(['flowing'])['flowing'] == '1'):
+        print('flowing, aborting')
+        return 0
 
-r = color[0:2]
-g = color[2:4]
-b = color[4:6]
+    r = color[0:2]
+    g = color[2:4]
+    b = color[4:6]
 
-if r == '00' and g == '00' and b == '00':
-    r = g = b = '01'
+    if r == '00' and g == '00' and b == '00':
+        r = g = b = '01'
 
-B.set_rgb(int(r, 16), int(g, 16), int(b, 16))
-# run(lambda bulb: bulb.set_rgb(int(r, 16), int(g, 16), int(b, 16)))
+    B.set_rgb(int(r, 16), int(g, 16), int(b, 16))
+
+if __name__ == '__main__':
+    exit(change(argv[1], check_flow=(argv[2] if len(argv) > 2 else '')))
