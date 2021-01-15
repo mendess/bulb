@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 from bulb_ip import B
 from subprocess import Popen, PIPE
+import shutil
 
 def get_state(props=['power', 'bright', 'ct', 'rgb', 'hue', 'sat', 'flowing', 'delayoff', 'flow_params' 'music_on']):
     return B.get_properties(requested_properties=props)
 
 def print_props(props):
     for k in props.keys():
-        if k == 'rgb':
+        if k == 'rgb' and shutil.which('color_picker') is not None:
             v = (
                     Popen(
                         ['color_picker'],
