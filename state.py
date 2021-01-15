@@ -8,17 +8,19 @@ def get_state(props=['power', 'bright', 'ct', 'rgb', 'hue', 'sat', 'flowing', 'd
 
 def print_props(props):
     for k in props.keys():
-        if k == 'rgb' and shutil.which('color_picker') is not None:
-            v = (
-                    Popen(
-                        ['color_picker'],
-                        stdin=PIPE,
-                        stdout=PIPE
-                        )
-                    .communicate(input=bytes('#{:06x}'.format(int(props[k])), 'utf-8'))[0]
-                    .decode('utf-8')
-                    .strip()
-                )
+        if k == 'rgb':
+            v = '#{:06x}'.format(int(props[k]))
+            if shutil.which('color_picker') is not None:
+                v = (
+                        Popen(
+                            ['color_picker'],
+                            stdin=PIPE,
+                            stdout=PIPE
+                            )
+                        .communicate(input=bytes(v, 'utf-8'))[0]
+                        .decode('utf-8')
+                        .strip()
+                    )
         elif k == 'power':
             v = props[k]
             v = ('\x1b[31m{}\x1b[0m' if v == 'off' else '\x1b[32m{}\x1b[0m').format(v)
