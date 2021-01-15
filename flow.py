@@ -50,6 +50,8 @@ if __name__ == '__main__':
     elif args.description:
         print(show_description(args.description))
     else:
-        args = args.flow.split()
-        flow_name, args = (args[0], list(map(int, args[1:])))
+        if type(args.flow) == list:
+            flow_name, args = (args.flow[0], list(map(int, args.flow[1:])))
+        else:
+            flow_name, args = (args.flow, [])
         flow(flow_name, *args)
