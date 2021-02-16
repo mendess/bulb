@@ -4,7 +4,6 @@ from yeelight import Bulb, BulbException
 from sys import argv, stderr
 
 colors_dic = {
-
     "red": "ff0000",
     "blue": "0000ff",
     "green": "00ff00",
@@ -14,10 +13,10 @@ colors_dic = {
     "fuxia": "ff00ff",
     "aqua": "00ffff",
     "orange": "FF5733"
-
 }
 
 def change(arg, check_flow=''):
+    B.turn_on();
     if arg in colors_dic:
         color = colors_dic[arg]
     else:
