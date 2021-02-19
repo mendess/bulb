@@ -2,6 +2,8 @@
 from bulb_ip import B
 from yeelight import Bulb, BulbException
 from sys import argv, stderr
+import random
+import argparse
 
 colors_dic = {
     "red": "ff0000",
@@ -12,13 +14,22 @@ colors_dic = {
     "purple": "800080",
     "fuxia": "ff00ff",
     "aqua": "00ffff",
-    "orange": "FF5733"
+    "orange": "FF5733",
+    "turquoise": "43C6DB",
+    "olive":"808000",
+    "whaleblue": "342D7E",
+    "forest":"43C6DB",
+    "mustard":"FFDB58",
 }
 
 def change(arg, check_flow=''):
-    B.turn_on();
+    if (not args.sleep):
+        B.turn_on()
+
     if arg in colors_dic:
         color = colors_dic[arg]
+    elif arg == "random":
+        color = random.choice(list(colors_dic.values()))
     else:
         color = arg.replace('#','')
 
@@ -26,7 +37,7 @@ def change(arg, check_flow=''):
         print(e)
         return e
 
-    if (check_flow == 'check_flow'
+    if (check_flow
         and B.get_properties(['flowing'])['flowing'] == '1'):
         print('flowing, aborting')
         return 0
@@ -41,4 +52,9 @@ def change(arg, check_flow=''):
     B.set_rgb(int(r, 16), int(g, 16), int(b, 16))
 
 if __name__ == '__main__':
-    exit(change(argv[1], check_flow=(argv[2] if len(argv) > 2 else '')))
+    parser = argparse.ArgumentParser()
+    parser.add_argument('color')
+    parser.add_argument('--sleep',action='store_true')
+    parser.add_argument('--flow',action='store_true')
+    args = parser.parse_args(argv[1:])
+    exit(change(args.color, check_flow=(args.flow if args.flow else '')))
