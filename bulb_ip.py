@@ -1,7 +1,25 @@
-from yeelight import Bulb, BulbException, discover_bulbs
+from yeelight import Bulb, BulbException
 from os import remove, environ as env
 
 IP_PATH = env['HOME'] + '/.cache/bulb_ip'
+
+def discover_bulbs():
+    import concurrent.futures
+    def test_ip(i):
+        try:
+            ip = f'192.168.1.{i}'
+            b = Bulb(ip)
+            print(b.get_properties())
+            return ip
+        except BulbException as e:
+            return None
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=255/2) as executor:
+        futs = [executor.submit(test_ip, i) for i in range(1, 255)]
+        for f in futs:
+            ip = f.result()
+            if ip:
+                return ip
 
 class Cache:
     @staticmethod
@@ -30,10 +48,16 @@ class Cache:
     @staticmethod
     def invalidate_cache():
         print("cache not invalidated because trash api")
+        Cache.refresh_ip()
         #remove(IP_PATH)
 
 
 class BulbIp:
+    def with_ip(ip):
+        b = BulbIp()
+        b.bulb = Bulb(ip)
+        return b
+
     def __init__(self):
         self.bulb = None
 
