@@ -14,18 +14,21 @@ def discover_bulbs():
         except BulbException as e:
             return None
 
+    ips = []
+    print("Looking for a new ip")
     with concurrent.futures.ThreadPoolExecutor(max_workers=255/2) as executor:
         futs = [executor.submit(test_ip, i) for i in range(1, 255)]
         for f in futs:
             ip = f.result()
             if ip:
-                return ip
+                ips.append(ip)
+    return ips
 
 class Cache:
     @staticmethod
     def refresh_ip():
         try:
-            ip = map(lambda x: x['ip'], discover_bulbs()).__next__()
+            ip = discover_bulbs()[0]
         except StopIteration:
             print('No bulbs found')
             return None
