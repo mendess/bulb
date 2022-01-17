@@ -4,6 +4,8 @@ from yeelight import RGBTransition, Flow
 from bulb_ip import B
 from state import get_state
 
+import turn_on
+
 color = int(get_state(props=['rgb'])['rgb'])
 b = color & 0xff
 color >>= 8

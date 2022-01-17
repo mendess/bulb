@@ -22,8 +22,8 @@ colors_dic = {
     "mustard":"FFDB58",
 }
 
-def change(arg, check_flow=''):
-    if (not args.sleep):
+def change(arg, check_flow='', sleep=False):
+    if (not sleep):
         B.turn_on()
 
     if arg in colors_dic:
@@ -57,4 +57,4 @@ if __name__ == '__main__':
     parser.add_argument('--sleep',action='store_true')
     parser.add_argument('--flow',action='store_true')
     args = parser.parse_args(argv[1:])
-    exit(change(args.color, check_flow=(args.flow if args.flow else '')))
+    exit(change(args.color, check_flow=(args.flow if args.flow else ''), sleep=args.sleep))
