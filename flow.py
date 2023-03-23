@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from bulb_ip import B
 from yeelight import Flow, Bulb, flows
+from state import get_state
 import argparse
 
 def flow(flow, *args):
@@ -36,6 +37,8 @@ def show_description(flow):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument("-n", "--no-replace",
+                       help="don't replace existing flows", action="store_true")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("flow", nargs='*', help="the flow method", default="random_loop")
     group.add_argument("-s", "--stop", help="stop flowing", action="store_true")
@@ -43,7 +46,10 @@ if __name__ == '__main__':
     group.add_argument("-d", "--description",
             help="show the description of a flow", type=str)
     args = parser.parse_args()
-    if args.list:
+
+    if args.no_replace and get_state()['flowing'] == '1':
+        pass
+    elif args.list:
         print(list_flows())
     elif args.stop:
         B.stop_flow()
