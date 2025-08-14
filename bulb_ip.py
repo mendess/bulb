@@ -29,7 +29,7 @@ class Cache:
     def refresh_ip():
         try:
             ip = discover_bulbs()[0]
-        except StopIteration:
+        except IndexError:
             print('No bulbs found')
             return None
         print(f'Found ip {ip}')
